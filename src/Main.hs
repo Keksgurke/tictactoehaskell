@@ -2,20 +2,24 @@ module Main where
 import Data.Either
 import Libr
 
-data World = World {getCurrentPlayer :: Player}
+data World = World {currentPlayer :: Player, currentBoard :: Board }
 
 main :: IO ()
 main = do
-    gameLoop $ World X
+    gameLoop $ World X (getEmptyBoard 3)
 
 gameLoop :: World -> IO ()
-gameLoop (World player) = do
+gameLoop (World player board) = do
+    print board
     putStrLn (show player ++ " Turn:")
     input <- getLine
-    if isLeft $ parseInput input player then 
-        gameLoop (World player) 
-        else 
-            gameLoop (World (nextPlayer player))
+    let newBoard = makeMove input player board
+    case newBoard of 
+        Left a ->  do
+            putStrLn a
+            gameLoop (World player board)
+        Right b -> gameLoop (World (nextPlayer player) b)
+
 
 nextPlayer :: Player -> Player
 nextPlayer X = O
