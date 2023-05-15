@@ -2,9 +2,11 @@
 module Libr where
 
 import Text.Read
+import Data.List
 
 data Player = X | O | Empty deriving (Show, Eq)
 type Point = (Int, Int)
+type Rule = (Board -> Bool)
 data Move = Move Player Point deriving (Show)
 newtype ValidMove = ValidMove Move
 type Board = [[Player]]
@@ -17,9 +19,7 @@ makeMove :: String -> Player -> Board -> Either String Board
 makeMove input currPlayer board = do
      (x,y) <- parseInput (words input)
      move <- getMove (x,y) currPlayer board
-     newBoard <- setFigure move board
-     
-     return newBoard
+     setFigure move board
 
 setFigure :: Move -> Board -> Either String Board
 setFigure move board = do
@@ -38,7 +38,7 @@ parseInput []  = Left "Input cannot be empty!"
 parseInput [x,y] = do
     row <- parseInt x
     col <- parseInt y
-    return $ (row - 1, col - 1)
+    return (row - 1, col - 1)
 parseInput _ = Left "Could not parse!"
 
 parseInt :: String -> Either String Int
@@ -53,13 +53,12 @@ getMove (x,y) player board
 
 
 printBoard :: Board -> String
-printBoard board = foldl (\acc x -> acc ++ "\\n" ++ (show x)) "" board
+printBoard = foldl (\acc x -> acc ++ "\\n" ++ show x) ""
 
 getField :: Move -> Board -> Player
 getField (Move _ (x,y)) board = let row = board !! y
                                 in  row !! x
    
-
 validMove :: Point -> Board -> Bool
 validMove (x, y) board
     | (x >= size) || (y >= size) = False
@@ -75,3 +74,28 @@ update :: [a] -> Int -> a -> [a]
 update [] _ _ = []
 update (_:xs) 0 element = element:xs
 update (x:xs) index element = x:update xs (index - 1) element 
+
+isWin :: Board -> Bool
+isWin board = or $ fmap ($ filteredBoard) rules
+    where filteredBoard = map (filter (/= Empty)) board
+
+rules :: [Rule]
+rules = [rowWin, columnWin, diagonalWin]
+
+diagonalWin :: Rule
+diagonalWin board = let indexRows     = zip board [0..]
+                        indexRevRows  = zip (reverse board) [0..]
+                        diagonal      = fmap (uncurry (!!)) indexRows
+                        otherDiagonal = fmap (uncurry (!!)) indexRevRows
+                    in  or $ fmap allSame [diagonal, otherDiagonal]
+
+rowWin :: Rule
+rowWin board = or $ fmap allSame board
+
+columnWin :: Rule
+columnWin board = rowWin $ transpose board 
+
+
+allSame :: Eq a => [a] -> Bool
+allSame [] = False
+allSame (x:xs) = foldl (\_ y -> x == y) False xs
