@@ -4,10 +4,17 @@ import           Data.Maybe
 import           Parser
 import           Types
 
-getEmptyBoard :: Int -> Board
-getEmptyBoard size = replicate size row
-  where
-    row = replicate size Nothing
+defaultBoard :: Board
+defaultBoard =
+  let row = replicate 3 Nothing
+   in replicate 3 row
+   
+getEmptyBoard :: Int -> Maybe Board
+getEmptyBoard size
+  | size >= 0 =
+    let row = replicate size Nothing
+     in Just $ replicate size row
+  | otherwise = Nothing
 
 setFigure :: Move -> Board -> Either String Board
 setFigure move board = do
