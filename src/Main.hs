@@ -5,12 +5,12 @@ import           Game
 import           System.Process
 import           Types
 
-startingBoard :: GameState
-startingBoard = Running $ World X (getEmptyBoard 3)
+startingState :: GameState
+startingState = Running $ World X (getEmptyBoard 3)
 
 main :: IO ()
 main = do
-  gameLoop startingBoard
+  gameLoop startingState
 
 gameLoop :: GameState -> IO ()
 gameLoop (Draw board) = do

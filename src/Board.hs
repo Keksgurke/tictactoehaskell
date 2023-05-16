@@ -9,12 +9,6 @@ getEmptyBoard size = replicate size row
   where
     row = replicate size Nothing
 
-makeMove :: String -> Player -> Board -> Either String Board
-makeMove input currPlayer board = do
-  (x, y) <- parseInput input
-  move <- getMove (x, y) currPlayer board
-  setFigure move board
-
 setFigure :: Move -> Board -> Either String Board
 setFigure move board = do
   let field = getField move board
