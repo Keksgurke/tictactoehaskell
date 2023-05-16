@@ -1,33 +1,49 @@
 module Main where
---import Data.Either
-import Libr
 
-data GameState = Running World | GameOver Player
-data World = World {currentPlayer :: Player, currentBoard :: Board }
+import           Board
+import           Game
+import           System.Process
+import           Types
+
+startingBoard :: GameState
+startingBoard = Running $ World X (getEmptyBoard 3)
 
 main :: IO ()
 main = do
-    gameLoop $ Running $ World X (getEmptyBoard 3)
+  gameLoop startingBoard
 
 gameLoop :: GameState -> IO ()
-gameLoop (GameOver winner) = putStrLn $ show winner ++ " won!!!"
+gameLoop (Draw board) = do
+  clearScreen
+  printBoard board
+  putStrLn "It's a draw!!!"
+gameLoop (GameOver winner board) = do
+  clearScreen
+  printBoard board
+  putStrLn $ show winner ++ " won!!!"
 gameLoop current@(Running (World player board)) = do
-    print (prettyPrint board)
-    putStrLn (show player ++ " Turn:")
-    input <- getLine
-    let newBoard = makeMove input player board
-    case newBoard of 
-        Left a ->  do
-            putStrLn a
-            gameLoop current
-        Right b -> gameLoop $ if isWin b then GameOver player
-                              else Running $ World (nextPlayer player) b
+  clearScreen
+  printBoard board
+  putStrLn ""
+  putStrLn (show player ++ " plays:")
+  input <- getLine
+  putStrLn ""
+  let nextState = getNextState input current
+  case nextState of
+    Left err -> do
+      putStrLn err
+      _ <- getLine
+      gameLoop current
+    Right state -> gameLoop state
 
+printBoard :: Board -> IO ()
+printBoard board = putStr $ prettyPrint board
+  where
+    prettyPrint =
+      let rowPrint = fmap (maybe "-" show)
+       in unlines . fmap (unwords . rowPrint)
 
-prettyPrint :: Board -> String
-prettyPrint = unlines . map (unwords . map show) 
-
-nextPlayer :: Player -> Player
-nextPlayer X = O
-nextPlayer _ = X
-
+clearScreen :: IO ()
+clearScreen = do
+  _ <- system "cls"
+  return ()
