@@ -11,7 +11,7 @@ boardState board
   | isFull board = Full
   | otherwise = Incomplete
 
-isWin :: Board -> Bool
+isWin :: Rule
 isWin board = any ($ board) rules
 
 rules :: [Rule]
