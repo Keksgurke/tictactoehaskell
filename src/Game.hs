@@ -1,9 +1,12 @@
-module Game where
+module Game
+  ( getNextState
+  ) where
 
-import           Board
-import           Parser
-import           Rules
-import           Types
+import           Board  (setFigure)
+import           Parser (getMove, parseInput)
+import           Rules  (boardState)
+import           Types  (BoardState (..), GameState (..), Player (..),
+                         World (..))
 
 getNextState :: String -> GameState -> Either String GameState
 getNextState input (Running (World player board)) = do

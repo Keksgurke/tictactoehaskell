@@ -1,14 +1,13 @@
 module Board where
 
-import           Data.Maybe
-import           Parser
-import           Types
+import           Data.Maybe (isJust)
+import           Types      (Board, Move (..), Player)
 
 defaultBoard :: Board
 defaultBoard =
   let row = replicate 3 Nothing
    in replicate 3 row
-   
+
 getEmptyBoard :: Int -> Maybe Board
 getEmptyBoard size
   | size >= 0 =

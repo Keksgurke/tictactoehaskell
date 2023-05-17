@@ -1,7 +1,10 @@
-module Parser where
+module Parser
+  ( parseInput
+  , getMove
+  ) where
 
-import           Text.Read
-import           Types
+import           Text.Read (readMaybe)
+import           Types     (Board, Move (..), Player, Point)
 
 parseInput :: String -> Either String Point
 parseInput [] = Left "Input cannot be empty!"

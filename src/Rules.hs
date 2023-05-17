@@ -1,9 +1,11 @@
-module Rules where
+module Rules
+  ( boardState
+  ) where
 
-import           Board
-import           Data.List
-import           Data.Maybe
-import           Types
+import           Board      (isFull)
+import           Data.List  (transpose)
+import           Data.Maybe (fromMaybe, mapMaybe)
+import           Types      (Board, BoardState (..), Rule)
 
 boardState :: Board -> BoardState
 boardState board

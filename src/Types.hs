@@ -26,7 +26,4 @@ data Move =
   Move Player Point
   deriving (Show)
 
-newtype ValidMove =
-  ValidMove Move
-
 type Board = [[Maybe Player]]
