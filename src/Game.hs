@@ -3,14 +3,14 @@ module Game
   ) where
 
 import           Board  (setFigure)
-import           Parser (getMove, parseInput)
+import           Parser (getMove, getPoint)
 import           Rules  (boardState)
 import           Types  (BoardState (..), GameState (..), Player (..),
                          World (..))
 
 getNextState :: String -> GameState -> Either String GameState
 getNextState input (Running (World player board)) = do
-  point <- parseInput input
+  point <- getPoint (words input) board
   move <- getMove point player board
   newBoard <- setFigure move board
   case boardState newBoard of

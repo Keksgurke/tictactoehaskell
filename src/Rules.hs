@@ -2,6 +2,7 @@ module Rules
   ( boardState
   ) where
 
+
 import           Board      (isFull)
 import           Data.List  (transpose)
 import           Data.Maybe (fromMaybe, mapMaybe)

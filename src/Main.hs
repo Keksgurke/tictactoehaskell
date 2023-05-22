@@ -1,10 +1,10 @@
 module Main where
 
-import           Board          (defaultBoard, getEmptyBoard)
-import           Game           (getNextState)
-import           System.Process (system)
-import           Types          (Board, GameState (..), Player (X),
-                                 World (World))
+import           Board          --(defaultBoard, getEmptyBoard)
+import           Game           --(getNextState)
+import           System.Process --(system)
+import           Types          --(Board, GameState (..), Player (X),
+                                -- World (World))
 
 startingState :: Int -> GameState
 startingState size =
