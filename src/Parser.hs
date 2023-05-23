@@ -21,7 +21,7 @@ getPoint _ _ = Left "Could not parse!"
 pointByIndex :: Int -> Board -> Either String Point
 pointByIndex input board
 
-  | input <= 0 || input >= size = Left "Index is out of bounds"
+  | input < 0 || input >= size = Left "Index is out of bounds"
   | otherwise                   = Right $ indexToCoordinate input board
   where
     size = length $ concat board

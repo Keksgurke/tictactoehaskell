@@ -14,7 +14,7 @@ startingState size =
 
 main :: IO ()
 main = do
-  gameLoop $ startingState 3
+  gameLoop $ startingState 4
 
 gameLoop :: GameState -> IO ()
 gameLoop (Draw board) = do

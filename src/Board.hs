@@ -14,7 +14,6 @@ getEmptyBoard size
   | size >= 0 =
     let row = replicate size Nothing
      in Just $ replicate size row
-
   | otherwise = Nothing
 
 setFigure :: Move -> Board -> Either String Board

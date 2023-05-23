@@ -14,10 +14,11 @@ getNextState input (Running (World player board)) = do
   point <- getPoint (words input) board
   move <- getMove point player board
   newBoard <- setFigure move board
-  case boardState newBoard of
-    Win        -> return $ GameOver player newBoard
+  let cBoard = computerTurn (nextPlayer player) newBoard
+  case boardState cBoard of
+    Win        -> return $ GameOver player cBoard
     Full       -> return $ Draw newBoard
-    Incomplete -> return $ Running (World (nextPlayer player) newBoard)
+    Incomplete -> return $ Running (World player cBoard)
 getNextState _ _ = Left "There is no next state"
 
 
