@@ -3,6 +3,7 @@ module Game
   ) where
 
 import           Board  (setFigure)
+import MinMax
 import           Parser (getMove, getPoint)
 import           Rules  (boardState)
 import           Types  (BoardState (..), GameState (..), Player (..),

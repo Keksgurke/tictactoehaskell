@@ -6,11 +6,11 @@ module Rules
 import           Board      (isFull)
 import           Data.List  (transpose)
 import           Data.Maybe (fromMaybe, mapMaybe)
-import           Types      (Board, BoardState (..), Rule)
+import           Types      (Board, BoardState (..), Rule, Player)
 
-boardState :: Board -> BoardState
-boardState board
-  | isWin board = Win
+boardState :: Board -> Player -> BoardState
+boardState board player
+  | isWin board = Win player
   | isFull board = Full
   | otherwise = Incomplete
 

@@ -6,7 +6,7 @@ data GameState
   | Draw Board
 
 data BoardState
-  = Win
+  = Win Player
   | Full
   | Incomplete
 

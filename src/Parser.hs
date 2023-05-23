@@ -1,6 +1,7 @@
 module Parser
   ( getMove
   , getPoint
+  , indexToCoordinate
   ) where
 
 import           Text.Read (readMaybe)
@@ -9,28 +10,27 @@ import           Types     (Board, Move (..), Player, Point)
 getPoint :: [String] -> Board -> Either String Point
 getPoint [x] board = do
   int <- parseInt x
-  pointByIndex int board
-getPoint [x, y] _ = pointByCoordinate x y
-getPoint [] _ = Left "The input was empty!"
-getPoint _ _ = Left "Could not parse!"
-
-pointByCoordinate :: String -> String -> Either String Point
-pointByCoordinate x y = do
+  pointByIndex (int - 1) board
+getPoint [x, y] _ = do
   row <- parseInt x
   col <- parseInt y
   return (row - 1, col - 1)
+getPoint [] _ = Left "The input was empty!"
+getPoint _ _ = Left "Could not parse!"
 
 pointByIndex :: Int -> Board -> Either String Point
 pointByIndex input board
 
   | input <= 0 || input >= size = Left "Index is out of bounds"
-  | otherwise =
-    let y   = index `div` length board
-        x   = index `mod` length board
-     in Right (x, y)
+  | otherwise                   = Right $ indexToCoordinate input board
   where
     size = length $ concat board
-    index = input - 1
+
+indexToCoordinate :: Int -> Board -> Point
+indexToCoordinate index board =
+  let y = index `div` length board
+      x = index `mod` length board
+   in (x, y)
 
 parseInt :: String -> Either String Int
 parseInt x =

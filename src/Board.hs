@@ -1,6 +1,7 @@
 module Board where
 
-import           Data.Maybe (isJust)
+import           Data.Maybe (isJust, isNothing)
+import           Parser     (indexToCoordinate)
 import           Types      (Board, Move (..), Player)
 
 defaultBoard :: Board
@@ -13,6 +14,7 @@ getEmptyBoard size
   | size >= 0 =
     let row = replicate size Nothing
      in Just $ replicate size row
+
   | otherwise = Nothing
 
 setFigure :: Move -> Board -> Either String Board
@@ -27,6 +29,16 @@ updateBoard (Move p (x, y)) board =
   let row = board !! y
       updatedRow = update row x (Just p)
    in update board y updatedRow
+
+allPossibleMoves :: Player -> Board -> [Move]
+allPossibleMoves player board =
+  [ Move player $ indexToCoordinate x board
+  | x <- [0 .. size - 1]
+  , isNothing (flatBoard !! x)
+  ]
+  where
+    flatBoard = concat board
+    size = length flatBoard
 
 getField :: Move -> Board -> Maybe Player
 getField (Move _ (x, y)) board =
