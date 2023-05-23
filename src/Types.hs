@@ -6,9 +6,9 @@ data GameState
   | Draw Board
 
 data BoardState
-  = Win Player
+  = Win
   | Full
-  | Incomplete
+  | Incomplete deriving (Show)
 
 data World =
   World Player Board

@@ -5,7 +5,7 @@ module Game
 import           Board  (setFigure)
 import MinMax
 import           Parser (getMove, getPoint)
-import           Rules  (boardState)
+import           Rules  (boardState, nextPlayer)
 import           Types  (BoardState (..), GameState (..), Player (..),
                          World (..))
 
@@ -20,6 +20,4 @@ getNextState input (Running (World player board)) = do
     Incomplete -> return $ Running (World (nextPlayer player) newBoard)
 getNextState _ _ = Left "There is no next state"
 
-nextPlayer :: Player -> Player
-nextPlayer X = O
-nextPlayer O = X
+

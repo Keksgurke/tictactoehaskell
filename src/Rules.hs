@@ -1,16 +1,21 @@
 module Rules
   ( boardState
+  , nextPlayer
   ) where
 
 
 import           Board      (isFull)
 import           Data.List  (transpose)
 import           Data.Maybe (fromMaybe, mapMaybe)
-import           Types      (Board, BoardState (..), Rule, Player)
+import           Types      (Board, BoardState (..), Rule, Player (..))
 
-boardState :: Board -> Player -> BoardState
-boardState board player
-  | isWin board = Win player
+nextPlayer :: Player -> Player
+nextPlayer X = O
+nextPlayer O = X
+
+boardState :: Board -> BoardState
+boardState board
+  | isWin board = Win
   | isFull board = Full
   | otherwise = Incomplete
 
